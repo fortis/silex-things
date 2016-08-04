@@ -1,3 +1,4 @@
+bugsnag.api_key: 'YOUR_API_KEY'
 db.options:
   driver: pdo_mysql
   host: localhost

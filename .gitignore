@@ -1,5 +1,5 @@
 /app/storage/*/*
-/app/vendor/
+/vendor/
 /app/config/settings.yml
 composer.lock
 pimple.json

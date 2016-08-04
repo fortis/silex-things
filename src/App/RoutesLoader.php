@@ -10,7 +10,7 @@ class RoutesLoader {
   private $app;
   private $routes;
 
-  const ROUTES_PATH = __DIR__ . '/../../config/routes.yml';
+  const ROUTES_PATH = __DIR__ . '/../../app/config/routes.yml';
 
   public function __construct(Application $app) {
     $this->app = $app;

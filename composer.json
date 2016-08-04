@@ -1,6 +1,6 @@
 {
   "name": "fortis/silex-things",
-  "license": "GPL-2.0",
+  "license": "MIT",
   "authors": [
     {
       "name": "Alan Bondarchuk",
@@ -8,11 +8,11 @@
     }
   ],
   "config": {
-    "vendor-dir": "app/vendor"
+    "vendor-dir": "vendor"
   },
   "autoload": {
     "psr-4": {
-      "App\\": "app/src"
+      "App\\": "src"
     }
   },
   "require": {
@@ -28,6 +28,9 @@
     "moust/silex-cache": "^2.0",
     "bugsnag/bugsnag": "^3.1",
     "fortis/silex-bugsnag": "^1.0",
-    "symfony/security": "^3.1"
+    "symfony/security": "^3.1",
+    "twig/twig": "^1.24",
+    "symfony/asset": "^3.1",
+    "leafo/scssphp": "^0.6.5"
   }
 }

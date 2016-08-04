@@ -2,14 +2,12 @@
 
 namespace App;
 
-use App\Security\TokenAuthenticator;
 use Bugsnag\Silex\Provider\BugsnagServiceProvider;
 use Moust\Silex\Provider\CacheServiceProvider;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\MonologServiceProvider;
-use Silex\Provider\SecurityServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
@@ -22,41 +20,58 @@ use WhoopsSilex\WhoopsServiceProvider;
 class App extends Application {
   use \Silex\Application\MonologTrait;
 
-  public $settings;
+  private $settings;
 
   function __construct(array $values = []) {
     parent::__construct($values);
 
     // Load settings.
     $this->settings = Yaml::parse(
-      file_get_contents(__DIR__ . '/../config/settings.yml')
+      file_get_contents(__DIR__ . '/../app/config/settings.yml')
     );
 
     // Register service providers.
     $this->register(new PimpleDumpProvider());
     $this->register(new SwiftmailerServiceProvider());
+
+    // Whoops provider.
     $this->register(new WhoopsServiceProvider());
+
+    // Monolog provider.
     $this->register(new MonologServiceProvider(), [
-        'monolog.logfile' => __DIR__ . '/../storage/log/development.log',
+        'monolog.logfile' => __DIR__ . '/../app/storage/log/development.log',
       ]
     );
 
-    // Web profiler.
+    // Assets provider.
+    $this->register(new \Silex\Provider\AssetServiceProvider(), array(
+      'assets.version' => 'v1',
+      'assets.version_format' => '%s?version=%s',
+    ));
+
+    // Twig provider.
+    $this->register(new TwigServiceProvider(), [
+      'twig.path' => [
+        __DIR__ . '/../resources/views',
+      ],
+    ]);
+
+    // Web profiler provider.
     $this->register(new HttpFragmentServiceProvider());
     $this->register(new ServiceControllerServiceProvider());
-    $this->register(new TwigServiceProvider());
     $this->register(new WebProfilerServiceProvider(), [
-        'profiler.cache_dir'    => __DIR__ . '/../storage/cache/profiler',
+        'profiler.cache_dir'    => __DIR__ . '/../app/storage/cache/profiler',
         'profiler.mount_prefix' => '/_profiler', // this is the default
       ]
     );
+
     // Doctrine DBAL Profiler.
     $this->register(new DoctrineProfilerServiceProvider());
 
     // Bugsnag Provider.
     $this->register(new BugsnagServiceProvider(), [
         'bugsnag.options' => [
-          'apiKey' => 'b1f8e1e13055db4433ac7da2bca5c3121',
+          'apiKey' => $this->settings['bugsnag.api_key'],
         ],
       ]
     );
@@ -65,7 +80,7 @@ class App extends Application {
     $this->register(new CacheServiceProvider(), [
         'cache.options' => [
           'driver'    => 'file',
-          'cache_dir' => __DIR__ . '/../storage/cache',
+          'cache_dir' => __DIR__ . '/../app/storage/cache',
         ],
       ]
     );

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controller;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
@@ -8,7 +8,10 @@ use Symfony\Component\HttpFoundation\Response;
 class HomeController {
 
   public function indexAction(Application $app) {
-    return new Response('It works!', 200);
+    return $app['twig']->render('index.twig', array(
+      'title' => 'It works!',
+      'content' => 'Some piece of text',
+    ));
   }
 
 }
