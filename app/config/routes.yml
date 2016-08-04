@@ -1,0 +1,4 @@
+home:
+  pattern:  /
+  defaults: { _controller: 'App\Controller\HomeController::indexAction' }
+  method:   GET

@@ -1,0 +1,5 @@
+/app/storage/*/*
+/app/vendor/
+/app/config/settings.yml
+composer.lock
+pimple.json
